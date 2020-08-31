@@ -6,17 +6,9 @@ import java.sql.SQLException;
 
 public class Cliente extends Entidad{
 	private int id;
+	private static int idEstatico = 0;
 	private String nombre;
 	private String email;
-	
-	
-
-	public Cliente(int id, String nombre, String email) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.email = email;
-	}
 	
 	public Cliente() {
 		// TODO Auto-generated constructor stub
@@ -34,11 +26,14 @@ public class Cliente extends Entidad{
 	public String toString() {
 		return "Cliente [id=" + id + ", nombre=" + nombre + ", email=" + email + "]";
 	}
-	public void addCliente(int id, String name, String email) throws SQLException {
+	
+	public void addCliente(String name, String email) throws SQLException {
+		this.idEstatico = idEstatico + 1;
 		Connection conn = this.driverDB();
+		conn.setAutoCommit(false);
 		String insert = "INSERT INTO Cliente(id, nombre, email) VALUES(?,?,?)"; //
 		PreparedStatement ps = conn.prepareStatement(insert);
-		ps.setInt(1, id);
+		ps.setInt(1, idEstatico);
 		ps.setString(2, name);
 		ps.setString(3, email);
 		ps.executeUpdate();

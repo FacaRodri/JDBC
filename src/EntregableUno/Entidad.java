@@ -4,7 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+/**
+ * Descripcion basica, que hace la clase? que provee
+ * @author Alan
+ * 
+ */
 public class Entidad {
 
 	private String uri; 
@@ -12,16 +16,11 @@ public class Entidad {
 	public String getUri() {return uri;}
 	public void setUri(String uri) {this.uri = uri;}
 
-	public Entidad(String uri) {
-		super();
-		this.uri = uri;
-	}
 	public Entidad() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.uri = "jdbc:mysql://localhost:3306/EntregableUno";
 	}
 	
-	public  void connect(String driver) {
+	public  void connect(String driver, String sentencia) {
 		try {
 			Class.forName(driver).getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -32,6 +31,7 @@ public class Entidad {
 		try {
 			Connection conn = this.driverDB();
 			conn.setAutoCommit(false);
+			createTable(conn, sentencia);
 			conn.close();
 		} catch (SQLException e){
 			e.printStackTrace();

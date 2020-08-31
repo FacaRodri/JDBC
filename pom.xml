@@ -3,6 +3,17 @@
   <groupId>JDBC</groupId>
   <artifactId>JDBC</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+    
+<!-- SQL-->
+	<dependency>
+	
+	    <groupId>mysql</groupId>
+	    <artifactId>mysql-connector-java</artifactId>
+	    <version>8.0.21</version>
+	</dependency>
+	
+  </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
