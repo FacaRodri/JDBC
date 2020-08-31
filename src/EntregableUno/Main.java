@@ -3,7 +3,7 @@ package EntregableUno;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		Entidad cliente = new Cliente(1, "pepe", "jaja@hotmail.com");
 
 	}
 
