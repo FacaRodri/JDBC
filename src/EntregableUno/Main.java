@@ -38,25 +38,21 @@ public class Main {
 			facturasProductoParser = CSVFormat.DEFAULT.withHeader().parse(new FileReader("data/facturas-productos.csv"));
 			
 		//inicializado de listas segun parsers
-			
-			//productos
-			for(CSVRecord row: productosParser) {
-				Producto p = new Producto(Integer.parseInt(row.get("idProducto")),row.get("nombre"),Float.parseFloat(row.get("valor")));
-				db.addProducto(p.getIdProducto(), p.getNombre(), p.getValor());
-			}
-			
 			//clientes
 			for(CSVRecord row: clientesParser) {
 				Cliente c = new Cliente(Integer.parseInt(row.get("idCliente")),row.get("nombre"),row.get("email"));
 				db.addCliente(c.getId(), c.getNombre(), c.getEmail());
 			}
-			
 			//facturas
 			for(CSVRecord row: facturasParser) {
 				Factura f = new Factura(Integer.parseInt(row.get("idCliente")),Integer.parseInt(row.get("idFactura")));
 				db.addFactura(f.getIdFactura(), f.getIdCliente());
 			}
-			
+			//productos
+			for(CSVRecord row: productosParser) {
+				Producto p = new Producto(Integer.parseInt(row.get("idProducto")),row.get("nombre"),Float.parseFloat(row.get("valor")));
+				db.addProducto(p.getIdProducto(), p.getNombre(), p.getValor());
+			}
 			//facturaProducto
 			for(CSVRecord row: facturasProductoParser) {
 				FacturaProducto fp = new FacturaProducto(Integer.parseInt(row.get("idProducto")),Integer.parseInt(row.get("idFactura")), Integer.parseInt(row.get("cantidad")));

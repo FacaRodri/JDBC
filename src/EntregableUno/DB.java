@@ -70,26 +70,28 @@ public class DB {
 		conn.setAutoCommit(false);
 		
 		//preparacion y ejecucion de sentencias
-		PreparedStatement pCli = conn.prepareStatement(""
-				+ "CREATE TABLE  if not exists  Cliente(idCliente INT, nombre VARCHAR (500), email VARCHAR(500))");
+		PreparedStatement pCli = conn.prepareStatement(
+		"CREATE TABLE  if not exists  Cliente(idCliente INT, nombre VARCHAR (500), email VARCHAR(500),CONSTRAINT PK_Cliente PRIMARY KEY (idCliente))");
 		pCli.execute();
 		pCli.close();
 				
-		PreparedStatement pProd = conn.prepareStatement("CREATE TABLE  if not exists  Producto(idProducto INT, nombre VARCHAR(45), valor FLOAT)");
+		PreparedStatement pProd = conn.prepareStatement("CREATE TABLE  if not exists  Producto(idProducto INT, nombre VARCHAR(45), valor FLOAT,CONSTRAINT PK_Producto PRIMARY KEY (idProducto))");
 		pProd.execute();
 		pProd.close();
 				
-		PreparedStatement pFac = conn.prepareStatement("CREATE TABLE  if not exists  Factura (idFactura INT, idCliente INT)");
+		PreparedStatement pFac = conn.prepareStatement("CREATE TABLE  if not exists  Factura (idFactura INT, idCliente INT,CONSTRAINT PK_Factura PRIMARY KEY (idFactura), CONSTRAINT FK_Factura_Cliente FOREIGN KEY(idCliente) REFERENCES Cliente(idCliente)");
 		pFac.execute();
 		pFac.close();
 				
-		PreparedStatement pFacProd = conn.prepareStatement("CREATE TABLE  if not exists  FacturaProducto(idFactura INT, idProducto INT, cantidad INT)");
+		PreparedStatement pFacProd = conn.prepareStatement("CREATE TABLE  if not exists  FacturaProducto(idFactura INT, idProducto INT, cantidad INT,"
+				+ "CONSTRAINT FK_FacturaProducto_Factura FOREIGN KEY(idFactura) REFERENCES Factura(idFactura), CONSTRAINT FK_FacturaProducto_Producto FOREIGN KEY(idProducto) REFERENCES Producto(idProducto))");
 		pFacProd.execute();
 		pFacProd.close();
 		
 		conn.commit();
 		
 	}
+	
 	
 	public void addProducto(int idProducto, String nombre, float valor) throws SQLException {
 		Connection conn = this.driverDB();
