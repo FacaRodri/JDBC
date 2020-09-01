@@ -1,9 +1,5 @@
 package EntregableUno;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 public class Cliente extends Entidad{
 	private int idCliente;
 	private String nombre;
@@ -33,18 +29,6 @@ public class Cliente extends Entidad{
 		return "Cliente [id=" + idCliente + ", nombre=" + nombre + ", email=" + email + "]";
 	}
 	
-	public void addCliente(String name, String email) throws SQLException {
-		Connection conn = this.driverDB();
-		conn.setAutoCommit(false);
-		String insert = "INSERT INTO Cliente(id, nombre, email) VALUES(?,?,?)"; //
-		PreparedStatement ps = conn.prepareStatement(insert);
-		ps.setInt(1, idCliente);
-		ps.setString(2, name);
-		ps.setString(3, email);
-		ps.executeUpdate();
-		ps.close();
-		conn.commit();
-	}
 	
 	
 }
