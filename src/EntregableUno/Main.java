@@ -45,7 +45,7 @@ public class Main {
 			}
 			//facturas
 			for(CSVRecord row: facturasParser) {
-				Factura f = new Factura(Integer.parseInt(row.get("idCliente")),Integer.parseInt(row.get("idFactura")));
+				Factura f = new Factura(Integer.parseInt(row.get("idFactura")),Integer.parseInt(row.get("idCliente")));
 				db.addFactura(f.getIdFactura(), f.getIdCliente());
 			}
 			//productos
