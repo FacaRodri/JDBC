@@ -16,7 +16,6 @@ import org.apache.commons.csv.CSVRecord;
 public class Main {
 
 	public static void main(String[] args) {
-		
 		/*
 			//MySql
 			String driver = "com.mysql.cj.jdbc.Driver";
@@ -26,9 +25,9 @@ public class Main {
 			String sentencia = "CREATE TABLE Cliente(" + 
 					"id INT, nombre VARCHAR(500), email VARCHAR(500), PRIMARY KEY(id))";
 			
+		*/
 			Entidad entidad = new Entidad();
 			Cliente cliente = new Cliente();
-		*/
 		CSVParser productosParser;
 		CSVParser clientesParser;
 		CSVParser facturasParser;
@@ -85,6 +84,7 @@ public class Main {
 			e1.printStackTrace();
 		}
 				
+		
 		
 	}
 

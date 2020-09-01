@@ -10,41 +10,14 @@ import java.sql.SQLException;
  * 
  */
 public class Entidad {
-
-	private String uri; 
-	
-	public String getUri() {return uri;}
-	public void setUri(String uri) {this.uri = uri;}
+	protected DB db;
 
 	public Entidad() {
-		this.uri = "jdbc:mysql://localhost:3306/EntregableUno";
-	}
-	
-	public  void connect(String driver, String sentencia) {
-		try {
-			Class.forName(driver).getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		try {
-			Connection conn = this.driverDB();
-			conn.setAutoCommit(false);
-			createTable(conn, sentencia);
-			conn.close();
-		} catch (SQLException e){
-			e.printStackTrace();
-		}
+		this.db = new DB();
 	}
 	
 	public Connection driverDB() {
-		try {
-			return DriverManager.getConnection(this.uri, "root", "password");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return this.db.driverDB();
 	}
 	
 	public  void createTable(Connection conn, String sentencia) {
