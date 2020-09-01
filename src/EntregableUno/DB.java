@@ -17,7 +17,7 @@ public class DB {
 		this.uri = "jdbc:mysql://localhost:3306/";
 		try {
 			this.createDB();
-			//inicializar tablas
+			this.createTables();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,7 +53,7 @@ public class DB {
 	}
 	
 	//crear tablas/db
-	public void createDB() throws SQLException {
+	private void createDB() throws SQLException {
 		Connection conn = this.driverDB();
 		conn.setAutoCommit(false);
 		String sentencia = "create schema if not exists EntregableUno;";
@@ -65,7 +65,82 @@ public class DB {
 		
 	}
 	
+	private void createTables() throws SQLException {
+		Connection conn = this.driverDB();
+		conn.setAutoCommit(false);
+		
+		//preparacion y ejecucion de sentencias
+		PreparedStatement pCli = conn.prepareStatement(""
+				+ "CREATE TABLE  if not exists  Cliente(idCliente INT, nombre VARCHAR (500), email VARCHAR(500))");
+		pCli.execute();
+		pCli.close();
+				
+		PreparedStatement pProd = conn.prepareStatement("CREATE TABLE  if not exists  Producto(idProducto INT, nombre VARCHAR(45), valor FLOAT)");
+		pProd.execute();
+		pProd.close();
+				
+		PreparedStatement pFac = conn.prepareStatement("CREATE TABLE  if not exists  Factura (idFactura INT, idCliente INT)");
+		pFac.execute();
+		pFac.close();
+				
+		PreparedStatement pFacProd = conn.prepareStatement("CREATE TABLE  if not exists  FacturaProducto(idFactura INT, idProducto INT, cantidad INT)");
+		pFacProd.execute();
+		pFacProd.close();
+		
+		conn.commit();
+		
+	}
 	
+	public void addProducto(int idProducto, String nombre, float valor) throws SQLException {
+		Connection conn = this.driverDB();
+		conn.setAutoCommit(false);
+		String insert = "INSERT INTO Producto(idProducto, nombre, valor) VALUES(?,?,?)"; //
+		PreparedStatement ps = conn.prepareStatement(insert);
+		ps.setInt(1, idProducto);
+		ps.setString(2, nombre);
+		ps.setFloat(3, valor);
+		ps.executeUpdate();
+		ps.close();
+		conn.commit();
+	}
+	
+	public void addFacturaProducto( int idProducto, int idFactura, int cantidad) throws SQLException {
+		Connection conn = this.driverDB();
+		conn.setAutoCommit(false);
+		String insert = "INSERT INTO FacturaProducto(idProducto, idFactura, cantidad) VALUES(?,?,?)"; //
+		PreparedStatement ps = conn.prepareStatement(insert);
+		ps.setInt(1, idProducto);
+		ps.setInt(2, idFactura);
+		ps.setInt(3, cantidad);
+		ps.executeUpdate();
+		ps.close();
+		conn.commit();
+	}
+	
+	public void addFactura(int idFactura, int idCliente) throws SQLException {
+		Connection conn = this.driverDB();
+		conn.setAutoCommit(false);
+		String insert = "INSERT INTO Factura(idFactura,idCliente) VALUES(?,?)"; //
+		PreparedStatement ps = conn.prepareStatement(insert);
+		ps.setInt(1, idFactura);
+		ps.setInt(2, idCliente);
+		ps.executeUpdate();
+		ps.close();
+		conn.commit();
+	}
+	
+	public void addCliente(int idCliente, String nombre, String email) throws SQLException {
+		Connection conn = this.driverDB();
+		conn.setAutoCommit(false);
+		String insert = "INSERT INTO Cliente(idCliente, nombre, email) VALUES(?,?,?)"; //
+		PreparedStatement ps = conn.prepareStatement(insert);
+		ps.setInt(1, idCliente);
+		ps.setString(2, nombre);
+		ps.setString(3, email);
+		ps.executeUpdate();
+		ps.close();
+		conn.commit();
+	}
 	
 
 }

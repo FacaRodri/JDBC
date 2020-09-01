@@ -1,8 +1,6 @@
 package EntregableUno;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 /**
  * Descripcion basica, que hace la clase? que provee
@@ -13,7 +11,6 @@ public class Entidad {
 	protected DB db;
 
 	public Entidad() {
-		this.db = new DB();
 	}
 	
 	public Connection driverDB() {
