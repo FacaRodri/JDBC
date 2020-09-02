@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /*
@@ -15,13 +16,6 @@ public class DB {
 	
 	public DB() {
 		this.uri = "jdbc:mysql://localhost:3306/";
-		try {
-			this.createDB();
-			this.createTables();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	public void connect() {
@@ -35,7 +29,8 @@ public class DB {
 		try {
 			Connection conn = this.driverDB();
 			conn.setAutoCommit(false);
-			//crear la base
+			this.createDB();
+			this.createTables();
 			conn.close();
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -142,6 +137,22 @@ public class DB {
 		ps.executeUpdate();
 		ps.close();
 		conn.commit();
+	}
+	
+	public String select() throws SQLException {
+		String sentencia = "SELECT p.idProducto, valor, count(*) cantidad, valor*count(*) resultado " + 
+				" FROM EntregableUno.Producto p, EntregableUno.FacturaProducto fp" + 
+				" where p.idProducto = fp.idProducto" + 
+				" group by idProducto" + 
+				" order by resultado desc" + 
+				" limit 1;";
+		Connection conn = this.driverDB();
+		PreparedStatement ps = conn.prepareStatement(sentencia);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			System.out.println("idProducto: "+ rs.getInt(1) + " total: "+rs.getInt(4)+ " nombre: "+rs.getString(2));
+		}
+		return "";
 	}
 	
 
