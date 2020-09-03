@@ -4,11 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
 
 import org.apache.commons.csv.CSVFormat;
@@ -19,25 +16,22 @@ public class Main {
 
 	public static void main(String[] args) throws SQLException {
 		BufferedReader entrada = new BufferedReader( new InputStreamReader(System.in));
-		@SuppressWarnings("deprecation")
 		Integer dato = 0;
 		
 		try {
 			System.out.println("Para crear y cargar la base de datos press 1");
 			System.out.println("Para ver los datos(teniendo la base cargada) press 2");
-			dato = new Integer(entrada.readLine());
+			dato = Integer.parseInt(entrada.readLine());
 			
 		} catch (NumberFormatException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		DB db = new DB();
 		
 		if (dato == 1 ) {
+			System.out.println("El sistema primero crea la base, las tablas y rellena las mismas con los datos .csv");
 			db.connect();
-			Entidad entidad = new Entidad();
-			Cliente cliente = new Cliente();
 			
 			CSVParser productosParser;
 			CSVParser clientesParser;
@@ -45,12 +39,6 @@ public class Main {
 			CSVParser facturasProductoParser;
 			
 			try {
-				//listas
-				List<Producto> productos=new LinkedList<Producto>();
-				List<Cliente> clientes=new LinkedList<Cliente>();
-				List<Factura> facturas=new LinkedList<Factura>();
-				List<FacturaProducto> facturaProducto=new LinkedList<FacturaProducto>();
-				
 				//parsers
 				productosParser = CSVFormat.DEFAULT.withHeader().parse(new FileReader("data/productos.csv"));
 				clientesParser = CSVFormat.DEFAULT.withHeader().parse(new FileReader("data/clientes.csv"));
@@ -85,7 +73,10 @@ public class Main {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}else {
+		}
+
+		System.out.println("Para ver los resultados press 2");
+		if (dato == 2) {
 			System.out.println("Ej3");
 			db.select();
 			System.out.println("Ej4");

@@ -12,7 +12,6 @@ import java.sql.SQLException;
  */
 public class DB {
 	private String uri; 
-	private String driver;
 	
 	public DB() {
 		this.uri = "jdbc:mysql://localhost:3306/";
@@ -20,7 +19,7 @@ public class DB {
 	
 	public void connect() {
 		try {
-			Class.forName(driver).getDeclaredConstructor().newInstance();
+			Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -29,8 +28,8 @@ public class DB {
 		try {
 			Connection conn = this.driverDB();
 			conn.setAutoCommit(false);
-			this.createDB();
-			this.createTables();
+			this.createDB(conn);
+			this.createTables(conn);
 			conn.close();
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -48,10 +47,8 @@ public class DB {
 	}
 	
 	//crear tablas/db
-	private void createDB() throws SQLException {
-		Connection conn = this.driverDB();
-		conn.setAutoCommit(false);
-		String sentencia = "CREATE SCHEMA IF NOT EXIST EntregableUno;";
+	private void createDB(Connection conn) throws SQLException {
+		String sentencia = "CREATE SCHEMA EntregableUno;";
 		PreparedStatement ps = conn.prepareStatement(sentencia);
 		ps.executeUpdate();
 		ps.close();
@@ -60,25 +57,23 @@ public class DB {
 		
 	}
 	
-	private void createTables() throws SQLException {
-		Connection conn = this.driverDB();
-		conn.setAutoCommit(false);
+	private void createTables(Connection conn) throws SQLException {
 		
 		//preparacion y ejecucion de sentencias
 		PreparedStatement pCli = conn.prepareStatement(
-		"CREATE TABLE  if not exists  Cliente(idCliente INT, nombre VARCHAR (500), email VARCHAR(500), PRIMARY KEY (idCliente))");
+		"CREATE TABLE  if not exists  EntregableUno.Cliente(idCliente INT, nombre VARCHAR (500), email VARCHAR(500), PRIMARY KEY (idCliente))");
 		pCli.execute();
 		pCli.close();
 				
-		PreparedStatement pProd = conn.prepareStatement("CREATE TABLE  if not exists  Producto(idProducto INT, nombre VARCHAR(45), valor FLOAT, PRIMARY KEY (idProducto))");
+		PreparedStatement pProd = conn.prepareStatement("CREATE TABLE  if not exists  EntregableUno.Producto(idProducto INT, nombre VARCHAR(45), valor FLOAT, PRIMARY KEY (idProducto))");
 		pProd.execute();
 		pProd.close();
 				
-		PreparedStatement pFac = conn.prepareStatement("CREATE TABLE  if not exists  Factura (idFactura INT, idCliente INT, PRIMARY KEY (idFactura), INDEX (idCliente), FOREIGN KEY(idCliente) REFERENCES Cliente(idCliente))");
+		PreparedStatement pFac = conn.prepareStatement("CREATE TABLE  if not exists  EntregableUno.Factura (idFactura INT, idCliente INT, PRIMARY KEY (idFactura), INDEX (idCliente), FOREIGN KEY(idCliente) REFERENCES Cliente(idCliente))");
 		pFac.execute();
 		pFac.close();
 				
-		PreparedStatement pFacProd = conn.prepareStatement("CREATE TABLE  if not exists  FacturaProducto(idFactura INT, idProducto INT, cantidad INT,"
+		PreparedStatement pFacProd = conn.prepareStatement("CREATE TABLE  if not exists  EntregableUno.FacturaProducto(idFactura INT, idProducto INT, cantidad INT,"
 				+ " FOREIGN KEY(idFactura) REFERENCES Factura(idFactura), FOREIGN KEY(idProducto) REFERENCES Producto(idProducto))");
 		pFacProd.execute();
 		pFacProd.close();
