@@ -51,7 +51,7 @@ public class DB {
 	private void createDB() throws SQLException {
 		Connection conn = this.driverDB();
 		conn.setAutoCommit(false);
-		String sentencia = "create schema if not exists EntregableUno;";
+		String sentencia = "CREATE SCHEMA IF NOT EXIST EntregableUno;";
 		PreparedStatement ps = conn.prepareStatement(sentencia);
 		ps.executeUpdate();
 		ps.close();
@@ -140,7 +140,7 @@ public class DB {
 	}
 	
 	public String select() throws SQLException {
-		String sentencia = "SELECT p.idProducto, valor, count(*) cantidad, valor*count(*) resultado " + 
+		String sentencia = "SELECT p.idProducto, valor, count(*) cantidad, valor*count(*) resultado, p.nombre " + 
 				" FROM EntregableUno.Producto p, EntregableUno.FacturaProducto fp" + 
 				" where p.idProducto = fp.idProducto" + 
 				" group by idProducto" + 
@@ -150,7 +150,30 @@ public class DB {
 		PreparedStatement ps = conn.prepareStatement(sentencia);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			System.out.println("idProducto: "+ rs.getInt(1) + " total: "+rs.getInt(4)+ " nombre: "+rs.getString(2));
+			System.out.println("idProducto: "+ rs.getInt(1) + " total: "+rs.getInt(4)+ " nombre: "+rs.getString(5));
+		}
+		return "";
+	}
+	
+	public String select2() throws SQLException {
+		String sentencia = "SELECT c.nombre, t2.facturacion" + 
+				" FROM EntregableUno.Cliente c," + 
+				" (SELECT f.idCliente, SUM(t1.valor) facturacion" + 
+				" FROM EntregableUno.Factura f," + 
+				" (SELECT fp.idFactura, SUM(fp.cantidad*p.valor) valor" + 
+				" FROM EntregableUno.FacturaProducto fp, EntregableUno.Producto p" + 
+				" WHERE fp.idProducto=p.idProducto" + 
+				" GROUP BY fp.idFactura) t1" + 
+				" WHERE f.idFactura=t1.idFactura" + 
+				" GROUP BY f.idCliente) t2" + 
+				" WHERE c.idCliente=t2.idCliente" + 
+				" ORDER BY facturacion DESC;";
+		Connection conn = this.driverDB();
+		conn.setAutoCommit(false);
+		PreparedStatement ps = conn.prepareStatement(sentencia);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			System.out.println("nombre: "+ rs.getString(1) + ", facturacion: "+rs.getInt(2));
 		}
 		return "";
 	}

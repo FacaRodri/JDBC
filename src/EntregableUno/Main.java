@@ -86,7 +86,10 @@ public class Main {
 				e1.printStackTrace();
 			}
 		}else {
+			System.out.println("Ej3");
 			db.select();
+			System.out.println("Ej4");
+			db.select2();
 		}
 		
 	}
