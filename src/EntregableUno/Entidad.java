@@ -2,11 +2,7 @@ package EntregableUno;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-/**
- * Descripcion basica, que hace la clase? que provee
- * @author Alan
- * 
- */
+
 public class Entidad {
 	protected DB db;
 

@@ -1,3 +1,16 @@
+/*
+ * Clase Main
+ * 
+ * Contiene la inicializacion de una base de datos MySql 
+ * Encargada tanto de crear el esquema y las tablas, como de
+ * llenarlas con los datos extraidos de los archivos .csv
+ * 
+ * 
+ * @author Grupo6
+ * 
+ */
+
+
 package EntregableUno;
 
 import java.io.BufferedReader;
@@ -6,11 +19,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-
+import java.util.Iterator;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+
 
 public class Main {
 
@@ -77,10 +91,15 @@ public class Main {
 
 		System.out.println("Para ver los resultados press 2");
 		if (dato == 2) {
-			System.out.println("Ej3");
-			db.select();
+			System.out.println("   ");
+			System.out.println("Ej3: ");
+			System.out.println(db.productoMasRecaudo());
+			System.out.println("   ");
 			System.out.println("Ej4");
-			db.select2();
+			Iterator<String> listaClientes = db.listaClientes();
+			while (listaClientes.hasNext()) {
+				System.out.println(listaClientes.next());
+			}
 		}
 		
 	}
